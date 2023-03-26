@@ -140,7 +140,7 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         return artist;     // reference to User object, or null value
     }
     @Override
-    void deleteArtistById(int artistId) throws DaoException
+    public void deleteArtistById(int artistId) throws DaoException
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
