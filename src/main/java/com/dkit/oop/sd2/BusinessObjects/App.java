@@ -13,7 +13,7 @@ package com.dkit.oop.sd2.BusinessObjects;
  *
  * Here, we use one DAO per database table.
  *
- * Use the SQL script "CreateUsers.sql" included with this project
+ * Use the SQL script "mysqlSetup.sql" included with this project
  * to create the required MySQL user_database and User table.
  */
 
