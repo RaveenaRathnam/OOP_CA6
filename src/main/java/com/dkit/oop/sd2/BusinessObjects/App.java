@@ -46,7 +46,8 @@ public class App
 
         try
         {
-            System.out.println("\nCall findAllUsers()");
+            //=====================================================================================
+            System.out.println("\nCall findAllArtists()");
             List<Artist> artists = IArtistDao.findAllArtists();     // call a method in the DAO
 
             if( artists.isEmpty() )
@@ -55,18 +56,17 @@ public class App
                 for (Artist artist : artists)
                     System.out.println("Artist: " + artist.toString());
             }
+//==============================================================================================================================
+            // test dao - with username and password that we know are present in the database
+            System.out.println("\nCall: findArtistById()");
+            int artistId=1;
+            Artist artist = IArtistDao.findArtistById(artistId);
 
-//            // test dao - with username and password that we know are present in the database
-//            System.out.println("\nCall: findArtistByUsernamePassword()");
-//            String username = "smithj";
-//            String password = "password";
-//            Artist artist = IUserDao.findUserByUsernamePassword(username, password);
-//
-//            if( artist != null ) // null returned if userid and password not valid
-//                System.out.println("User found: " + artist);
-//            else
-//                System.out.println("Username with that password not found");
-//
+            if( artist != null ) // null returned if userid and password not valid
+                System.out.println("Artist found: " + artist);
+            else
+                System.out.println("Artist with that 'ID' not found");
+//===============================================================================================
 //            // test dao - with an invalid username (i.e. not in database)
 //            username = "madmax";
 //            password = "thunderdome";
