@@ -30,7 +30,7 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 {
 
     @Override
-    public List<Artist> findAllUsers() throws DaoException
+    public List<Artist> findAllArtists() throws DaoException
     {
         Connection connection = null;
         PreparedStatement ps = null;
