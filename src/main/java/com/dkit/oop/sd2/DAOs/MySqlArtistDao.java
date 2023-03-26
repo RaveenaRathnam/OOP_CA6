@@ -139,6 +139,47 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         }
         return artist;     // reference to User object, or null value
     }
+    @Override
+    void deleteArtistById(int artistId) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "DELETE FROM ARTIST WHERE ID= ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,artistId);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e)
+        {
+            throw new DaoException("deleteArtistById() " + e.getMessage());
+        } finally
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (preparedStatement != null)
+                {
+                    preparedStatement.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("deleteArtistById() " + e.getMessage());
+            }
+        }
+    }
 //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException{
 //        Connection connection = null;
 //        PreparedStatement preparedStatement = null;

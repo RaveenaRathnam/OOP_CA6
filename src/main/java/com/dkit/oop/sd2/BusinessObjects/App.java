@@ -65,7 +65,7 @@ public class App
             if( artist != null ) // null returned if userid and password not valid
                 System.out.println("Artist found: " + artist);
             else
-                System.out.println("Artist with that 'ID' not found");
+                System.out.println("Artist with the id: "+artist+" not found");
 //===============================================================================================
 //            // test dao - with an invalid username (i.e. not in database)
 //            username = "madmax";
