@@ -86,59 +86,59 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         return artistsList;     // may be empty
     }
 
-//    @Override
-//    public Artist findUserByUsernamePassword(String user_name, String pass_word) throws DaoException
-//    {
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//        ResultSet resultSet = null;
-//        Artist artist = null;
-//        try
-//        {
-//            connection = this.getConnection();
-//
-//            String query = "SELECT * FROM USER WHERE USERNAME = ? AND PASSWORD = ?";
-//            preparedStatement = connection.prepareStatement(query);
-//            preparedStatement.setString(1, user_name);
-//            preparedStatement.setString(2, pass_word);
-//
-//            resultSet = preparedStatement.executeQuery();
-//            if (resultSet.next())
-//            {
-//                int userId = resultSet.getInt("USER_ID");
-//                String username = resultSet.getString("USERNAME");
-//                String password = resultSet.getString("PASSWORD");
-//                String lastname = resultSet.getString("LAST_NAME");
-//                String firesultSettname = resultSet.getString("FIRST_NAME");
-//
-//                artist = new Artist(userId, firesultSettname, lastname, username, password);
-//            }
-//        } catch (SQLException e)
-//        {
-//            throw new DaoException("findUserByUsernamePassword() " + e.getMessage());
-//        } finally
-//        {
-//            try
-//            {
-//                if (resultSet != null)
-//                {
-//                    resultSet.close();
-//                }
-//                if (preparedStatement != null)
-//                {
-//                    preparedStatement.close();
-//                }
-//                if (connection != null)
-//                {
-//                    freeConnection(connection);
-//                }
-//            } catch (SQLException e)
-//            {
-//                throw new DaoException("findUserByUsernamePassword() " + e.getMessage());
-//            }
-//        }
-//        return artist;     // reference to User object, or null value
-//    }
+    @Override
+    public Artist findArtistById(int artistId) throws DaoException
+    {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Artist artist = null;
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "SELECT * FROM ARTIST WHERE ID= ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,artistId);
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+            {  int id = resultSet.getInt("ID");
+                String name = resultSet.getString("NAME");
+                String country = resultSet.getString("COUNTRY");
+                String genre = resultSet.getString("GENRE");
+                int active_since = resultSet.getInt("ACTIVE_SINCE");
+                String biography = resultSet.getString("BIOGRAPHY");
+                double rating =resultSet.getDouble("RATING");
+                artist= new Artist(id,name,country,genre,active_since,biography,rating);
+
+            }
+        } catch (SQLException e)
+        {
+            throw new DaoException("findArtistById() " + e.getMessage());
+        } finally
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (preparedStatement != null)
+                {
+                    preparedStatement.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("findArtistById() " + e.getMessage());
+            }
+        }
+        return artist;     // reference to User object, or null value
+    }
 //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException{
 //        Connection connection = null;
 //        PreparedStatement preparedStatement = null;
