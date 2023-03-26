@@ -67,6 +67,16 @@ public class App
             else
                 System.out.println("Artist with the id: "+artist+" not found");
 //===============================================================================================
+            // test dao - with username and password that we know are present in the database
+            System.out.println("\nCall: deleteArtistById()");
+            artistId=1;
+            IArtistDao.deleteArtistById(artistId);
+
+            if( artist != null ) // null returned if userid and password not valid
+                System.out.println("Artist has been successfully deleted");
+            else
+                System.out.println("Artist with the id: "+artist+" not deleted as it doesn't exist.");
+// ==============================================================================================
 //            // test dao - with an invalid username (i.e. not in database)
 //            username = "madmax";
 //            password = "thunderdome";
