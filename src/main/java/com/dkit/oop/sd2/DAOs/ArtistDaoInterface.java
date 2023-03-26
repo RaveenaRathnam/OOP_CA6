@@ -27,7 +27,7 @@ public interface ArtistDaoInterface
 {
     public List<Artist>  findAllArtists() throws DaoException;
 
-//    public Artist findUserByUsernamePassword(String username, String password) throws DaoException;
+    public Artist findArtistById(int artistId) throws DaoException;
 //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException;
 //    public Artist addUser(Artist artist) throws DaoException;
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException;
