@@ -16,7 +16,7 @@ package com.dkit.oop.sd2.DAOs;
  */
 
 
-import com.dkit.oop.sd2.DTOs.User;
+import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,16 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MySqlUserDao extends MySqlDao implements UserDaoInterface
+public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 {
 
     @Override
-    public List<User> findAllUsers() throws DaoException
+    public List<Artist> findAllUsers() throws DaoException
     {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet resultSet = null;
-        List<User> usersList = new ArrayList<>();
+        List<Artist> usersList = new ArrayList<>();
 
         try
         {
@@ -54,7 +54,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
                 String password = resultSet.getString("PASSWORD");
                 String lastname = resultSet.getString("LAST_NAME");
                 String firstname = resultSet.getString("FIRST_NAME");
-                User u = new User(userId, firstname, lastname, username, password);
+                Artist u = new Artist(userId, firstname, lastname, username, password);
                 usersList.add(u);
             }
         } catch (SQLException e)
@@ -85,12 +85,12 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
     }
 
     @Override
-    public User findUserByUsernamePassword(String user_name, String pass_word) throws DaoException
+    public Artist findUserByUsernamePassword(String user_name, String pass_word) throws DaoException
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        User user = null;
+        Artist artist = null;
         try
         {
             connection = this.getConnection();
@@ -109,7 +109,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
                 String lastname = resultSet.getString("LAST_NAME");
                 String firesultSettname = resultSet.getString("FIRST_NAME");
 
-                user = new User(userId, firesultSettname, lastname, username, password);
+                artist = new Artist(userId, firesultSettname, lastname, username, password);
             }
         } catch (SQLException e)
         {
@@ -135,13 +135,13 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
                 throw new DaoException("findUserByUsernamePassword() " + e.getMessage());
             }
         }
-        return user;     // reference to User object, or null value
+        return artist;     // reference to User object, or null value
     }
-    public List<User> findAllUsersLastNameContains(String subString) throws DaoException{
+    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        List<User> usersList = new ArrayList<>();
+        List<Artist> usersList = new ArrayList<>();
 
         try
         {
@@ -164,7 +164,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
                 String password = resultSet.getString("PASSWORD");
                 String lastname = resultSet.getString("LAST_NAME");
                 String firstname = resultSet.getString("FIRST_NAME");
-                User u = new User(userId, firstname, lastname, username, password);
+                Artist u = new Artist(userId, firstname, lastname, username, password);
                 usersList.add(u);
             }
         } catch (SQLException e)
@@ -193,13 +193,13 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         }
         return usersList;     // may be empty
     }
-    public User addUser(User user) throws DaoException{
+    public Artist addUser(Artist artist) throws DaoException{
         Connection connection = null;
         PreparedStatement ps1 = null;
         PreparedStatement ps2 = null;
         ResultSet resultSet = null;
        // List<User> usersList = new ArrayList<>();
-        User u = null;
+        Artist u = null;
 
         try
         {
@@ -210,11 +210,11 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
             String query2="SELECT * FROM USER WHERE USERNAME=?";
             ps1 = connection.prepareStatement(query1);
             ps2 = connection.prepareStatement(query2);
-            ps1.setString(1, user.getUsername());
-            ps1.setString(2, user.getPassword());
-            ps1.setString(3, user.getLastName());
-            ps1.setString(4, user.getFirstName());
-            ps2.setString(1, user.getUsername());
+            ps1.setString(1, artist.getUsername());
+            ps1.setString(2, artist.getPassword());
+            ps1.setString(3, artist.getLastName());
+            ps1.setString(4, artist.getFirstName());
+            ps2.setString(1, artist.getUsername());
             //Using a PreparedStatement to execute SQL...
             ps1.executeUpdate();
             resultSet = ps2.executeQuery();
@@ -225,7 +225,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
                 String password = resultSet.getString("PASSWORD");
                 String lastname = resultSet.getString("LAST_NAME");
                 String firstname = resultSet.getString("FIRST_NAME");
-                u = new User(firstname, lastname, username, password);
+                u = new Artist(firstname, lastname, username, password);
 
             }
         } catch (SQLException e)
@@ -255,13 +255,13 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         }
         return u;
     }
-    public User updatePassword(String usernamen,String passwordn) throws DaoException{
+    public Artist updatePassword(String usernamen, String passwordn) throws DaoException{
         Connection connection = null;
         PreparedStatement ps1 = null;
         PreparedStatement ps2 = null;
         ResultSet resultSet = null;
         // List<User> usersList = new ArrayList<>();
-        User u = null;
+        Artist u = null;
 
         try
         {
@@ -284,7 +284,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
                 String password = resultSet.getString("PASSWORD");
                 String lastname = resultSet.getString("LAST_NAME");
                 String firstname = resultSet.getString("FIRST_NAME");
-                u = new User(firstname, lastname, username, password);
+                u = new Artist(firstname, lastname, username, password);
 
             }
         } catch (SQLException e)

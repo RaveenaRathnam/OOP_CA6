@@ -17,9 +17,9 @@ package com.dkit.oop.sd2.BusinessObjects;
  * to create the required MySQL user_database and User table.
  */
 
-import com.dkit.oop.sd2.DAOs.MySqlUserDao;
-import com.dkit.oop.sd2.DAOs.UserDaoInterface;
-import com.dkit.oop.sd2.DTOs.User;
+import com.dkit.oop.sd2.DAOs.MySqlArtistDao;
+import com.dkit.oop.sd2.DAOs.ArtistDaoInterface;
+import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class App
 {
     public static void main(String[] args)
     {
-        UserDaoInterface IUserDao = new MySqlUserDao();  //"IUserDao" -> "I" stands for for
+        ArtistDaoInterface IUserDao = new MySqlArtistDao();  //"IUserDao" -> "I" stands for for
 
 //        // Notice that the userDao reference is an Interface type.
 //        // This allows for the use of different concrete implementations.
@@ -47,74 +47,74 @@ public class App
         try
         {
             System.out.println("\nCall findAllUsers()");
-            List<User> users = IUserDao.findAllUsers();     // call a method in the DAO
+            List<Artist> artists = IUserDao.findAllUsers();     // call a method in the DAO
 
-            if( users.isEmpty() )
+            if( artists.isEmpty() )
                 System.out.println("There are no Users");
             else {
-                for (User user : users)
-                    System.out.println("User: " + user.toString());
+                for (Artist artist : artists)
+                    System.out.println("User: " + artist.toString());
             }
 
             // test dao - with username and password that we know are present in the database
             System.out.println("\nCall: findUserByUsernamePassword()");
             String username = "smithj";
             String password = "password";
-            User user = IUserDao.findUserByUsernamePassword(username, password);
+            Artist artist = IUserDao.findUserByUsernamePassword(username, password);
 
-            if( user != null ) // null returned if userid and password not valid
-                System.out.println("User found: " + user);
+            if( artist != null ) // null returned if userid and password not valid
+                System.out.println("User found: " + artist);
             else
                 System.out.println("Username with that password not found");
 
             // test dao - with an invalid username (i.e. not in database)
             username = "madmax";
             password = "thunderdome";
-            user = IUserDao.findUserByUsernamePassword(username, password);
-            if(user != null)
-                System.out.println("Username: " + username + " was found: " + user);
+            artist = IUserDao.findUserByUsernamePassword(username, password);
+            if(artist != null)
+                System.out.println("Username: " + username + " was found: " + artist);
             else
                 System.out.println("Username: " + username + ", password: " + password +" is not valid.");
 
             //test-class findAllUsersLastNameContains()
             System.out.println("\nCall findAllUsersLastNameContains()");
             String substring="S";
-            List<User> usersContainln = IUserDao.findAllUsersLastNameContains(substring);     // call a method in the DAO
+            List<Artist> usersContainln = IUserDao.findAllUsersLastNameContains(substring);     // call a method in the DAO
 
-            if( users.isEmpty() )
+            if( artists.isEmpty() )
                 System.out.println("There are no Users");
             else {
-                for (User user1 : usersContainln)
-                    System.out.println("User: " + user1.toString());
+                for (Artist artist1 : usersContainln)
+                    System.out.println("User: " + artist1.toString());
             }
 
             //test-class addUser()
             System.out.println("\nCall findAllUsers()");
-            User user2 = IUserDao.addUser(new User("Mary","Ann","maryann","mann123"));     // call a method in the DAO
-            System.out.println("User: " + user2.toString());
+            Artist artist2 = IUserDao.addUser(new Artist("Mary","Ann","maryann","mann123"));     // call a method in the DAO
+            System.out.println("User: " + artist2.toString());
 
             System.out.println("\nCall findAllUsers()");
-             users = IUserDao.findAllUsers();     // call a method in the DAO
+             artists = IUserDao.findAllUsers();     // call a method in the DAO
 
-            if( users.isEmpty() )
+            if( artists.isEmpty() )
                 System.out.println("There are no Users");
             else {
-                for (User user1 : users)
-                    System.out.println("User: " + user1.toString());
+                for (Artist artist1 : artists)
+                    System.out.println("User: " + artist1.toString());
             }
             //test-updatepassword
             System.out.println("\nCall UpdatePassword()");
-            User user3z = IUserDao.addUser(new User("Mary","Ann","maryann","mann123"));     // call a method in the DAO
-            System.out.println("User: " + user2.toString());
+            Artist artist3Z = IUserDao.addUser(new Artist("Mary","Ann","maryann","mann123"));     // call a method in the DAO
+            System.out.println("User: " + artist2.toString());
 
             System.out.println("\nCall findAllUsers()");
-            users = IUserDao.findAllUsers();     // call a method in the DAO
+            artists = IUserDao.findAllUsers();     // call a method in the DAO
 
-            if( users.isEmpty() )
+            if( artists.isEmpty() )
                 System.out.println("There are no Users");
             else {
-                for (User user1 : users)
-                    System.out.println("User: " + user1.toString());
+                for (Artist artist1 : artists)
+                    System.out.println("User: " + artist1.toString());
             }
         }
         catch( DaoException e )

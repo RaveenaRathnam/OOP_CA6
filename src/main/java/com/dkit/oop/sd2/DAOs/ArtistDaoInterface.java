@@ -19,17 +19,17 @@ package com.dkit.oop.sd2.DAOs;
  * can be replaced by mock DAO objects.
  */
 
-import com.dkit.oop.sd2.DTOs.User;
+import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.util.List;
 
-public interface UserDaoInterface
+public interface ArtistDaoInterface
 {
-    public List<User> findAllUsers() throws DaoException;
+    public List<Artist> findAllUsers() throws DaoException;
 
-    public User findUserByUsernamePassword(String username, String password) throws DaoException;
-    public List<User> findAllUsersLastNameContains(String subString) throws DaoException;
-    public User addUser(User user) throws DaoException;
-    public User updatePassword(String usernamen,String passwordn) throws DaoException;
+    public Artist findUserByUsernamePassword(String username, String password) throws DaoException;
+    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException;
+    public Artist addUser(Artist artist) throws DaoException;
+    public Artist updatePassword(String usernamen, String passwordn) throws DaoException;
 }
 
