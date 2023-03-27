@@ -77,38 +77,6 @@ public class App {
                 }
             }
         }
-//            //=====================================================================================
-//            System.out.println("\nCall findAllArtists()");
-//            List<Artist> artists = IArtistDao.findAllArtists();     // call a method in the DAO
-//
-//            if( artists.isEmpty() )
-//                System.out.println("There are no Artists");
-//            else {
-//                for (Artist artist : artists)
-//                    System.out.println("Artist: " + artist.toString());
-//            }
-////==============================================================================================================================
-//            // test dao - with username and password that we know are present in the database
-//            System.out.println("\nCall: findArtistById()");
-//            int artistId=1;
-//            Artist artist = IArtistDao.findArtistById(artistId);
-//
-//            if( artist != null ) // null returned if userid and password not valid
-//                System.out.println("Artist found: " + artist);
-//            else
-//                System.out.println("Artist with the id: "+artist+" not found");
-////===============================================================================================
-//            // test dao - with username and password that we know are present in the database
-//            System.out.println("\nCall: deleteArtistById()");
-//            artistId=1;
-//            IArtistDao.deleteArtistById(artistId);
-//
-//            if( artist != null ) // null returned if userid and password not valid
-//                System.out.println("Artist has been successfully deleted");
-//            else
-//                System.out.println("Artist with the id: "+artist+" not deleted as it doesn't exist.");
-//// ==============================================================================================
-
         catch (DaoException e) {
             e.printStackTrace();
         }
@@ -122,13 +90,12 @@ public class App {
             // test dao - with username and password that we know are present in the database
             System.out.println("\nCall: deleteArtistById()");
            System.out.println("Please enter the Id of the Artist: ");
-             int artistId=1;
-            IArtistDao.deleteArtistById(artistId);
-
-            if( artist != null ) // null returned if userid and password not valid
+             int artistId=keyboard.nextInt();
+            boolean result= IArtistDao.deleteArtistById(artistId);
+            if( result == true) // null returned if userid and password not valid
                 System.out.println("Artist has been successfully deleted");
             else
-                System.out.println("Artist with the id: "+artist+" not deleted as it doesn't exist.");
+                System.out.println("Artist with the id: "+artistId+" not deleted as it doesn't exist.");
     }
 
     private static void findArtistById() throws DaoException{

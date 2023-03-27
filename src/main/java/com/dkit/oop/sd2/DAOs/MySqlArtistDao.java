@@ -140,11 +140,12 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         return artist;     // reference to User object, or null value
     }
     @Override
-    public void deleteArtistById(int artistId) throws DaoException
+    public boolean deleteArtistById(int artistId) throws DaoException
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        boolean result=false;
         try
         {
             connection = this.getConnection();
@@ -153,7 +154,13 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1,artistId);
 
-            preparedStatement.executeUpdate();
+            int value=preparedStatement.executeUpdate();
+            if(value==1){
+                result=true;
+            }
+            else {
+                result=false;
+            }
 
         } catch (SQLException e)
         {
@@ -179,6 +186,7 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
                 throw new DaoException("deleteArtistById() " + e.getMessage());
             }
         }
+        return result;
     }
 //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException{
 //        Connection connection = null;
@@ -236,68 +244,73 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 //        }
 //        return usersList;     // may be empty
 //    }
-//    public Artist addUser(Artist artist) throws DaoException{
-//        Connection connection = null;
-//        PreparedStatement ps1 = null;
-//        PreparedStatement ps2 = null;
-//        ResultSet resultSet = null;
-//       // List<User> usersList = new ArrayList<>();
-//        Artist u = null;
-//
-//        try
-//        {
-//            //Get connection object using the methods in the super class (MySqlDao.java)...
-//            connection = this.getConnection();
-//
-//            String query1 = "INSERT INTO USER (USERNAME,PASSWORD,LAST_NAME,FIRST_NAME) VALUES (?,?,?,?)";
-//            String query2="SELECT * FROM USER WHERE USERNAME=?";
-//            ps1 = connection.prepareStatement(query1);
-//            ps2 = connection.prepareStatement(query2);
-//            ps1.setString(1, artist.getUsername());
-//            ps1.setString(2, artist.getPassword());
-//            ps1.setString(3, artist.getLastName());
-//            ps1.setString(4, artist.getFirstName());
-//            ps2.setString(1, artist.getUsername());
-//            //Using a PreparedStatement to execute SQL...
-//            ps1.executeUpdate();
-//            resultSet = ps2.executeQuery();
-//            if (resultSet.next())
-//            {
-//                //int userId = resultSet.getInt("USER_ID");
-//                String username = resultSet.getString("USERNAME");
-//                String password = resultSet.getString("PASSWORD");
-//                String lastname = resultSet.getString("LAST_NAME");
-//                String firstname = resultSet.getString("FIRST_NAME");
-//                u = new Artist(firstname, lastname, username, password);
-//
-//            }
-//        } catch (SQLException e)
-//        {
-//            throw new DaoException("findAllUseresultSet() " + e.getMessage());
-//        } finally
-//        {
-//            try
-//            {
-//                if (resultSet != null)
-//                {
-//                    resultSet.close();
-//                }
-//                if (ps1 != null && ps2 !=null)
-//                {
-//                    ps1.close();
-//                    ps2.close();
-//                }
-//                if (connection != null)
-//                {
-//                    freeConnection(connection);
-//                }
-//            } catch (SQLException e)
-//            {
-//                throw new DaoException("findAllUsers() " + e.getMessage());
-//            }
-//        }
-//        return u;
-//    }
+    public Artist addUser(Artist artist) throws DaoException{
+        Connection connection = null;
+        PreparedStatement ps1 = null;
+        PreparedStatement ps2 = null;
+        ResultSet resultSet = null;
+       // List<User> usersList = new ArrayList<>();
+         artist = null;
+
+        try
+        {
+            //Get connection object using the methods in the super class (MySqlDao.java)...
+            connection = this.getConnection();
+
+            String query1 = " INSERT INTO artist (name, country, genre, active_since, biography, rating)\n" +
+                    " VALUES  VALUES (?,?,?,?,?,?)";
+            String query2="SELECT * FROM USER WHERE USERNAME=?";
+            ps1 = connection.prepareStatement(query1);
+            ps2 = connection.prepareStatement(query2);
+            ps1.setString(1, artist.getName());
+            ps1.setString(2, artist.getCountry());
+            ps1.setString(3, artist.getGenre());
+            ps1.setInt(4, artist.getActive_since());
+            ps1.setString(5, artist.getBiography());
+            ps2.setDouble(1, artist.getRating());
+            //Using a PreparedStatement to execute SQL...
+            ps1.executeUpdate();
+            resultSet = ps2.executeQuery();
+            if (resultSet.next())
+            {
+
+                String name = resultSet.getString("NAME");
+                String country = resultSet.getString("COUNTRY");
+                String genre = resultSet.getString("GENRE");
+                int active_since = resultSet.getInt("ACTIVE_SINCE");
+                String biography = resultSet.getString("BIOGRAPHY");
+                double rating =resultSet.getDouble("RATING");
+                artist= new Artist(name,country,genre,active_since,biography,rating);
+
+            }
+        } catch (SQLException e)
+        {
+            throw new DaoException("findAllUseresultSet() " + e.getMessage());
+        } finally
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (ps1 != null && ps2 !=null)
+                {
+                    ps1.close();
+                    ps2.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("findAllUsers() " + e.getMessage());
+            }
+        }
+        return artist;
+    }
+
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException{
 //        Connection connection = null;
 //        PreparedStatement ps1 = null;

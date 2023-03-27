@@ -32,7 +32,15 @@ public class Artist {
         this.biography = biography;
         this.rating = rating;
     }
-
+    public Artist(String name, String country, String genre, int active_since, String biography, double rating) {
+        this.id = 0;
+        this.name = name;
+        this.country = country;
+        this.genre = genre;
+        this.active_since = active_since;
+        this.biography = biography;
+        this.rating = rating;
+    }
     public int getId() {
         return id;
     }
