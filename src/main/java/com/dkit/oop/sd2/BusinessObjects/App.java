@@ -83,7 +83,29 @@ public class App {
     }
 
     private static void insertArtist()throws DaoException {
-
+        keyboard.nextLine();
+        System.out.println("\nCall insertartist()");
+        System.out.println("Please enter the details of the artist:");
+        System.out.println("Name:");
+        String name =keyboard.nextLine();
+        System.out.println("Country:");
+        String country =keyboard.nextLine();
+        System.out.println("Genre:");
+        String genre =keyboard.nextLine();
+        System.out.println("Active Since:");
+        int active_since =keyboard.nextInt();
+        keyboard.nextLine();
+        System.out.println("Biography:");
+        String biography =keyboard.nextLine();
+        System.out.println("Rating out of 5:");
+        double rating =keyboard.nextDouble();
+        Artist a=new Artist(name,country,genre,active_since,biography,rating);
+        Artist artist = IArtistDao.insertArtist(a);     // call a method in the DAO
+        if( artist!=null)
+            System.out.println("Artist added!"+artist.toString());
+        else {
+                System.out.println("Artist not added!");
+        }
     }
 
     private static void deleteArtistById() throws DaoException{

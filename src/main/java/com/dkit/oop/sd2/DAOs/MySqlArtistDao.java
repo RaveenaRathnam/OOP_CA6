@@ -250,16 +250,15 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         PreparedStatement ps2 = null;
         ResultSet resultSet = null;
        // List<User> usersList = new ArrayList<>();
-         artist = null;
+//         artist = null;
 
         try
         {
             //Get connection object using the methods in the super class (MySqlDao.java)...
             connection = this.getConnection();
 
-            String query1 = " INSERT INTO artist (name, country, genre, active_since, biography, rating)\n" +
-                    " VALUES  VALUES (?,?,?,?,?,?)";
-            String query2="SELECT * FROM USER WHERE USERNAME=?";
+            String query1 = " INSERT INTO ARTIST (name, country, genre, active_since, biography, rating) VALUES(?,?,?,?,?,?)";
+            String query2="SELECT * FROM ARTIST WHERE NAME=?";
             ps1 = connection.prepareStatement(query1);
             ps2 = connection.prepareStatement(query2);
             ps1.setString(1, artist.getName());
@@ -267,7 +266,8 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
             ps1.setString(3, artist.getGenre());
             ps1.setInt(4, artist.getActive_since());
             ps1.setString(5, artist.getBiography());
-            ps2.setDouble(1, artist.getRating());
+            ps1.setDouble(6, artist.getRating());
+            ps2.setString(1, artist.getName());
             //Using a PreparedStatement to execute SQL...
             ps1.executeUpdate();
             resultSet = ps2.executeQuery();
@@ -285,7 +285,7 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
             }
         } catch (SQLException e)
         {
-            throw new DaoException("findAllUseresultSet() " + e.getMessage());
+            throw new DaoException("findAllArtistresultSet() " + e.getMessage());
         } finally
         {
             try
