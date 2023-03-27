@@ -1,5 +1,7 @@
 package com.dkit.oop.sd2.DTOs;
 
+import java.util.Objects;
+
 /**                                                     OOP Feb 2022
  *  Data Transfer Object (DTO)
  *
@@ -108,6 +110,19 @@ public class Artist {
                 ", biography='" + biography + '\'' +
                 ", rating=" + rating +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Artist)) return false;
+        Artist artist = (Artist) o;
+        return getId() == artist.getId() && getActive_since() == artist.getActive_since() && Double.compare(artist.getRating(), getRating()) == 0 && getName().equals(artist.getName()) && getCountry().equals(artist.getCountry()) && getGenre().equals(artist.getGenre()) && Objects.equals(getBiography(), artist.getBiography());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getCountry(), getGenre(), getActive_since(), getBiography(), getRating());
     }
 }
 
