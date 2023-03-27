@@ -29,6 +29,7 @@ public interface ArtistDaoInterface
 
     public Artist findArtistById(int artistId) throws DaoException;
     public boolean deleteArtistById(int artistId) throws DaoException;
+    public Artist insertArtist(Artist artist) throws DaoException;
 //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException;
 //    public Artist addUser(Artist artist) throws DaoException;
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException;

@@ -244,7 +244,7 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 //        }
 //        return usersList;     // may be empty
 //    }
-    public Artist addUser(Artist artist) throws DaoException{
+    public Artist insertArtist(Artist artist) throws DaoException{
         Connection connection = null;
         PreparedStatement ps1 = null;
         PreparedStatement ps2 = null;
