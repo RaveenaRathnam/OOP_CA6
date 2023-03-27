@@ -16,7 +16,7 @@ import java.util.Objects;
  * between the Data Access Layer (DAOs) and the Business Layer objects.
  */
 
-public class Artist {
+public class Artist implements Comparable<Artist> {
     private int id;
     private String name;
     private String country;
@@ -123,6 +123,11 @@ public class Artist {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getName(), getCountry(), getGenre(), getActive_since(), getBiography(), getRating());
+    }
+
+    @Override
+    public int compareTo(Artist o) {
+        return this.getName().compareToIgnoreCase(o.getName());
     }
 }
 
