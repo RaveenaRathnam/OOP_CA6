@@ -188,7 +188,39 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         }
         return result;
     }
-//    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException{
+//    /**
+//     * Filters the recipes in the databases based on the provided filter.
+//     *
+//     * @param filter An IFilter object, which is checked against all the recipes to see if they match the filter.
+//     * @see IFilter
+//     * @return A list of the filtered recipes
+//     * @throws DaoException Extends SQLException
+//     */
+//    @Override
+//    public List<Recipe> filterRecipes(IFilter filter) throws DaoException
+//    {
+//        List<Recipe> filteredList = new ArrayList<>();
+//
+//        try
+//        {
+//            List<Recipe> allRecipes = findAllRecipes();
+//            for(Recipe recipe : allRecipes)
+//            {
+//                if(filter.matches(recipe))
+//                {
+//                    filteredList.add(recipe);
+//                }
+//            }
+//        }
+//        catch (DaoException daoe)
+//        {
+//            System.out.println("filterRecipes() " + daoe.getMessage());
+//        }
+//
+//        return filteredList;
+//    }
+
+    //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException{
 //        Connection connection = null;
 //        PreparedStatement preparedStatement = null;
 //        ResultSet resultSet = null;
