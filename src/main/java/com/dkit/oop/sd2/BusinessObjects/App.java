@@ -21,6 +21,8 @@ import com.dkit.oop.sd2.DAOs.MySqlArtistDao;
 import com.dkit.oop.sd2.DAOs.ArtistDaoInterface;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -66,6 +68,9 @@ public class App {
                     case 4:
                           insertArtist();
                         break;
+                    case 5:
+                        filterArtists();
+                        break;
                     case 0:
                         System.out.println("Exiting the app...");
                         exit = true;
@@ -81,6 +86,130 @@ public class App {
             e.printStackTrace();
         }
     }
+    private static void filterArtists()
+    {
+        List<Artist> filteredArtists = new ArrayList<>();
+
+        boolean validInput = false;
+
+        while(!validInput)
+        {
+             printFilterMenuInstructions();
+            int choice = keyboard.nextInt();
+
+            switch (choice)
+            {
+                case 1:
+                    filteredArtists= filterByName();
+                    printFilteredList(filteredArtists);
+                    break;
+                case 2:
+                    filteredArtists = filterByGenre();
+                    printFilteredList(filteredArtists);
+                    break;
+                case 3:
+                    filteredArtists = filterByRating();
+                    printFilteredList(filteredArtists);
+                    break;
+                case 4:
+                    filteredArtists = filterByActiveSince();
+                    printFilteredList(filteredArtists);
+                    break;
+                case 0:
+                    System.out.println("Exiting Filter...");
+                    validInput = true;
+                    break;
+                default:
+                    System.out.println("\nInvalid input. Try again.");
+                    break;
+            }
+
+        }
+
+    }
+    private static List<Artist> filterByName()
+    {
+        keyboard.nextLine();
+        System.out.println("\nEnter Name: ");
+        String name=keyboard.nextLine();
+
+        List<Artist> filteredArtists = null;
+
+        try
+        {
+            filteredArtists = IArtistDao.filterArtists(new FilterArtistsByName(name));
+        }
+        catch(DaoException daoe)
+        {
+            System.out.println("filterByName() " + daoe.getMessage());
+        }
+        return filteredArtists;
+    }
+
+    private static List<Artist> filterByGenre()
+    {
+        keyboard.nextLine();
+        System.out.println("\nEnter Genre: ");
+        String genre=keyboard.nextLine();
+
+        List<Artist> filteredArtists = null;
+
+        try
+        {
+            filteredArtists = IArtistDao.filterArtists(new FilterArtistsByGenre(genre));
+        }
+        catch(DaoException daoe)
+        {
+            System.out.println("filterByGenre() " + daoe.getMessage());
+        }
+
+        return filteredArtists;
+    }
+
+    private static List<Artist> filterByRating()
+    {
+        keyboard.nextLine();
+        System.out.println("\nEnter minimum rating(1-5): ");
+        double minRating =keyboard.nextDouble();
+        System.out.println("\nEnter maximum rating(" + minRating + " - 5): ");
+        double maxRating =keyboard.nextDouble();
+
+        List<Artist> filteredArtists = null;
+
+        try
+        {
+            filteredArtists = IArtistDao.filterArtists(new FilterArtistsByRating(minRating, maxRating));
+        }
+        catch(DaoException daoe)
+        {
+            System.out.println("filterByRating() " + daoe.getMessage());
+        }
+
+        return filteredArtists;
+    }
+    private static List<Artist> filterByActiveSince()
+    {
+        keyboard.nextLine();
+        System.out.println("\nEnter minimum active since(year): ");
+        int minActiveSince =keyboard.nextInt();
+        System.out.println("\nEnter maximum active since(year): ");
+        int maxActiveSince =keyboard.nextInt();
+
+        List<Artist> filteredArtists = null;
+
+        try
+        {
+            filteredArtists = IArtistDao.filterArtists(new FilterArtistsByActiveSince(minActiveSince, maxActiveSince));
+        }
+        catch(DaoException daoe)
+        {
+            System.out.println("filterByActiveSince() " + daoe.getMessage());
+        }
+
+        return filteredArtists;
+    }
+
+
 
     private static void insertArtist()throws DaoException {
         keyboard.nextLine();
@@ -154,7 +283,28 @@ public class App {
         System.out.println("|   |                          2. Dispaly Artist By Id                      |  |");
         System.out.println("|   |                          3. Delete Artist By Id                       |  |");
         System.out.println("|   |                               4. Add Artist                           |  |");
+        System.out.println("|   |                             5. Filter Artist                          |  |");
         System.out.println("|   -------------------------------------------------------------------------  |");
         System.out.println("================================================================================");
+    }
+    private static void printFilterMenuInstructions() {
+        System.out.println("==================================== FILTER OPTIONS ============================");
+        System.out.println("|   ----------------------------------    MENU   ----------------------------  |");
+        System.out.println("|   |                          Please Select an option:                     |  |");
+        System.out.println("|   |                                0. Exit                                |  |");
+        System.out.println("|   |                          1. Filter Artists By Name                    |  |");
+        System.out.println("|   |                          2. Filter Artists By Genre                   |  |");
+        System.out.println("|   |                          3. Filter Artists By Rating                  |  |");
+        System.out.println("|   |                          4. Filter Artists By Active Since            |  |");
+        System.out.println("|   -------------------------------------------------------------------------  |");
+        System.out.println("================================================================================");
+    }
+    private static void printFilteredList(List<Artist> artistList) {
+        System.out.println("\nDisplaying filtered artists: \n");
+        for(Artist a : artistList)
+        {
+            System.out.println(a);
+            System.out.println();
+        }
     }
 }
