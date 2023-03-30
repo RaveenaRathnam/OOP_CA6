@@ -2,10 +2,10 @@ package com.dkit.oop.sd2.BusinessObjects;
 
 import com.dkit.oop.sd2.DTOs.Artist;
 
-public class FilterArtistByName implements IFilter{
+public class FilterArtistsByName implements IFilter{
     private String name;
 
-    public FilterArtistByName(String name) {
+    public FilterArtistsByName(String name) {
         this.name = name;
     }
 
