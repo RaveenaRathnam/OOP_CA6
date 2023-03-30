@@ -16,6 +16,7 @@ package com.dkit.oop.sd2.DAOs;
  */
 
 
+import com.dkit.oop.sd2.BusinessObjects.IFilter;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.sql.Connection;
@@ -341,6 +342,37 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
             }
         }
         return artist;
+    }
+    /**
+     * Filters the artists in the databases based on the provided filter.
+     *
+     * @param filter An IFilter object, which is checked against all the artists to see if they match the filter.
+     * @see IFilter
+     * @return A list of the filtered recipes
+     * @throws DaoException Extends SQLException
+     */
+//    @Override
+    public List<Artist> filterArtists(IFilter filter) throws DaoException
+    {
+        List<Artist> filteredList = new ArrayList<>();
+
+        try
+        {
+            List<Artist> allArtists = findAllArtists();
+            for(Artist artist : allArtists)
+            {
+                if(filter.matches(artist))
+                {
+                    filteredList.add(artist);
+                }
+            }
+        }
+        catch (DaoException daoe)
+        {
+            System.out.println("filterArtists() " + daoe.getMessage());
+        }
+
+        return filteredList;
     }
 
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException{
