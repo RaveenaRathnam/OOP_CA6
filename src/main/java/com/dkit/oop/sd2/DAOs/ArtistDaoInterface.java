@@ -19,6 +19,7 @@ package com.dkit.oop.sd2.DAOs;
  * can be replaced by mock DAO objects.
  */
 
+import com.dkit.oop.sd2.BusinessObjects.IFilter;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.util.List;
@@ -30,6 +31,7 @@ public interface ArtistDaoInterface
     public Artist findArtistById(int artistId) throws DaoException;
     public boolean deleteArtistById(int artistId) throws DaoException;
     public Artist insertArtist(Artist artist) throws DaoException;
+    public List<Artist> filterArtists(IFilter filter) throws DaoException;
 //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException;
 //    public Artist addUser(Artist artist) throws DaoException;
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException;
