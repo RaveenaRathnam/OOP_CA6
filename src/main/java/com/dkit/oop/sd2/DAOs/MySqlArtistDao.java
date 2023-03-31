@@ -17,6 +17,7 @@ package com.dkit.oop.sd2.DAOs;
 
 
 import com.dkit.oop.sd2.BusinessObjects.IFilter;
+import com.dkit.oop.sd2.Cache.ArtistCache;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.sql.Connection;
@@ -24,7 +25,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Vector;
 
 
 public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
@@ -59,6 +62,7 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
                 double rating =resultSet.getDouble("RATING");
                 Artist a = new Artist(id,name,country,genre,active_since,biography,rating);
                 artistsList.add(a);
+
             }
         } catch (SQLException e)
         {
@@ -94,51 +98,55 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Artist artist = null;
-        try
-        {
-            connection = this.getConnection();
+        HashSet<Integer> artistCache = new HashSet<>();
+        List<Artist> intialArtistList=new ArrayList<>();
+            try {
+                connection = this.getConnection();
+                intialArtistList=findAllArtists();
+                 for(Artist a:intialArtistList){
+                     artistCache.add(a.getId());
+                 }
+                 if(artistCache.contains(artistId)) {
+                     String query = "SELECT * FROM ARTIST WHERE ID= ?";
+                     preparedStatement = connection.prepareStatement(query);
+                     preparedStatement.setInt(1, artistId);
 
-            String query = "SELECT * FROM ARTIST WHERE ID= ?";
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,artistId);
+                     resultSet = preparedStatement.executeQuery();
+                     if (resultSet.next()) {
+                         int id = resultSet.getInt("ID");
+                         String name = resultSet.getString("NAME");
+                         String country = resultSet.getString("COUNTRY");
+                         String genre = resultSet.getString("GENRE");
+                         int active_since = resultSet.getInt("ACTIVE_SINCE");
+                         String biography = resultSet.getString("BIOGRAPHY");
+                         double rating = resultSet.getDouble("RATING");
+                         artist = new Artist(id, name, country, genre, active_since, biography, rating);
 
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next())
-            {  int id = resultSet.getInt("ID");
-                String name = resultSet.getString("NAME");
-                String country = resultSet.getString("COUNTRY");
-                String genre = resultSet.getString("GENRE");
-                int active_since = resultSet.getInt("ACTIVE_SINCE");
-                String biography = resultSet.getString("BIOGRAPHY");
-                double rating =resultSet.getDouble("RATING");
-                artist= new Artist(id,name,country,genre,active_since,biography,rating);
-
-            }
-        } catch (SQLException e)
-        {
-            throw new DaoException("findArtistById() " + e.getMessage());
-        } finally
-        {
-            try
-            {
-                if (resultSet != null)
-                {
-                    resultSet.close();
-                }
-                if (preparedStatement != null)
-                {
-                    preparedStatement.close();
-                }
-                if (connection != null)
-                {
-                    freeConnection(connection);
-                }
-            } catch (SQLException e)
-            {
+                     }
+                 }
+                 else{
+                     System.out.println("Artist with Id: "+artistId+" Not found!");
+                 }
+            } catch (SQLException e) {
                 throw new DaoException("findArtistById() " + e.getMessage());
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                    if (preparedStatement != null) {
+                        preparedStatement.close();
+                    }
+                    if (connection != null) {
+                        freeConnection(connection);
+                    }
+                } catch (SQLException e) {
+                    throw new DaoException("findArtistById() " + e.getMessage());
+                }
             }
-        }
-        return artist;     // reference to User object, or null value
+
+            return artist;     // reference to User object, or null value
+
     }
     @Override
     public boolean deleteArtistById(int artistId) throws DaoException
