@@ -264,8 +264,6 @@ public class App {
             Artist artist = IArtistDao.findArtistById(artistId);
             if( artist != null ) // null returned if userid and password not valid
                 System.out.println("Artist found: " + artist);
-            else
-                System.out.println("Artist with the id: "+artist+" not found");
     }
 
     private static void displayAllArtists() throws DaoException{
