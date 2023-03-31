@@ -23,6 +23,7 @@ import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -138,6 +139,7 @@ public class App {
         try
         {
             filteredArtists = IArtistDao.filterArtists(new FilterArtistsByName(name));
+             
         }
         catch(DaoException daoe)
         {
@@ -157,6 +159,7 @@ public class App {
         try
         {
             filteredArtists = IArtistDao.filterArtists(new FilterArtistsByGenre(genre));
+
         }
         catch(DaoException daoe)
         {
@@ -179,6 +182,8 @@ public class App {
         try
         {
             filteredArtists = IArtistDao.filterArtists(new FilterArtistsByRating(minRating, maxRating));
+            ArtistRatingComparator artistRatingComparator=new ArtistRatingComparator();
+            Collections.sort(filteredArtists,artistRatingComparator);
         }
         catch(DaoException daoe)
         {
@@ -200,6 +205,8 @@ public class App {
         try
         {
             filteredArtists = IArtistDao.filterArtists(new FilterArtistsByActiveSince(minActiveSince, maxActiveSince));
+            ArtistActiveSinceComparator activeSinceComparator=new ArtistActiveSinceComparator();
+            Collections.sort(filteredArtists,activeSinceComparator);
         }
         catch(DaoException daoe)
         {
