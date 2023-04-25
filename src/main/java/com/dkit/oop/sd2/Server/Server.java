@@ -136,7 +136,7 @@ public class Server
                         if( artist != null ) // null returned if userid and password not valid
                         {
                             socketWriter.println("Artist found: " + artist);
-                        }//sends the artist by id to the clent
+                        }//sends the artist by id to the client
 
                     }
 //                    else if (message.startsWith("Echo"))

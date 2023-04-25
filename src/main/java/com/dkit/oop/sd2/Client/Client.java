@@ -55,6 +55,8 @@ public class Client {
                     System.out.println("Please enter the Id of the Artist: ");
                     int artistId=in.nextInt();
                     socketWriter.println(command+" "+artistId);
+                } else if (command.startsWith("2")) {
+                    socketWriter.println(command);
                 }
                 Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
 
@@ -63,6 +65,11 @@ public class Client {
 
                     String artistByIdString = socketReader.nextLine();
                     System.out.println("Client message: Displaying Artist By ID: " + artistByIdString );
+                }
+                else if(command.startsWith("2"))
+                {
+                    String artistsString = socketReader.nextLine();
+                    System.out.println("Client message: Displaying All Artists: " + artistsString );
                 }
 //                else                            // the user has entered the Echo command or an invalid command
 //                {
