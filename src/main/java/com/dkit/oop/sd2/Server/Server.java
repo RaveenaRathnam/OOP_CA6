@@ -45,6 +45,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Scanner;
 
 public class Server
@@ -139,11 +140,17 @@ public class Server
                         }//sends the artist by id to the client
 
                     }
-//                    else if (message.startsWith("Echo"))
-//                    {
-//                        message = message.substring(5); // strip off the 'Echo ' part
-//                        socketWriter.println(message);  // send message to client
-//                    }
+                    else if (message.startsWith("2"))
+                    {
+                        String artists = IArtistDao.findAllArtistsJson();     // call a method in the DAO
+
+                        if( artists.isEmpty() )
+                            System.out.println("There are no Artists");
+                        else {
+                            socketWriter.println(artists);  // send message to client
+                        }
+
+                    }
                     else
                     {
                         socketWriter.println("I'm sorry I don't understand :(");

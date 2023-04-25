@@ -58,11 +58,11 @@ public class Client {
                 } else if (command.startsWith("2")) {
                     socketWriter.println(command);
                 }
+
                 Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
 
                 if(command.startsWith("1"))   //we expect the server to return a time
                 {
-
                     String artistByIdString = socketReader.nextLine();
                     System.out.println("Client message: Displaying Artist By ID: " + artistByIdString );
                 }
