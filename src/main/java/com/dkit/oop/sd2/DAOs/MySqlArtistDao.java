@@ -20,6 +20,8 @@ import com.dkit.oop.sd2.BusinessObjects.IFilter;
 import com.dkit.oop.sd2.Cache.ArtistCache;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
+import com.google.gson.Gson;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -381,6 +383,39 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         }
 
         return filteredList;
+    }
+    /**
+     * Gets all the artists in the database in JSON String format.
+     *
+     * @return A JSON String containing all the artists in the database
+     * @throws DaoException Extends SQLException
+     */
+    @Override
+    public String findAllArtistsJson() throws DaoException
+    {
+        List<Artist> artistsList = findAllArtists();
+
+        if(artistsList == null || artistsList.isEmpty()) return null;
+
+        Gson gsonParser = new Gson();
+        return gsonParser.toJson(artistsList);
+    }
+    /**
+     * Gets the JSON String of a Artist object when provided the id.
+     *
+     * @param artistId The id of the artist
+     * @return A JSON String containing the fields of the artist object matching the provided id.
+     * @throws DaoException Extends SQLException
+     */
+    @Override
+    public String findArtistByIdJson(int artistId) throws DaoException
+    {
+        Artist artist = findArtistById(artistId);
+
+        if(artist == null) return null;
+
+        Gson gsonParser = new Gson();
+        return gsonParser.toJson(artist);
     }
 
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException{
