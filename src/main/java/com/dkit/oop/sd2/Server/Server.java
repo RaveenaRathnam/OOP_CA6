@@ -32,6 +32,11 @@ package com.dkit.oop.sd2.Server;
  */
 
 
+import com.dkit.oop.sd2.DAOs.ArtistDaoInterface;
+import com.dkit.oop.sd2.DAOs.MySqlArtistDao;
+import com.dkit.oop.sd2.DTOs.Artist;
+import com.dkit.oop.sd2.Exceptions.DaoException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,9 +45,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalTime;
+import java.util.Scanner;
 
 public class Server
 {
+    private static final Scanner keyboard = new Scanner(System.in);
+    private static final ArtistDaoInterface IArtistDao = new MySqlArtistDao();//"IUserDao" -> "I" stands for for
     public static void main(String[] args)
     {
         Server server = new Server();
@@ -120,16 +128,22 @@ public class Server
                 {
                     System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + message);
 
-                    if (message.startsWith("Time"))
+                    if (message.startsWith("1"))
                     {
-                        LocalTime time =  LocalTime.now();
-                        socketWriter.println(time);  // sends current time to client
+                        String[] charactersArrayArtist = message.split(" ");
+                        int artistId=Integer.parseInt(charactersArrayArtist[1]);
+                        String artist = IArtistDao.findArtistByIdJson(artistId);
+                        if( artist != null ) // null returned if userid and password not valid
+                        {
+                            socketWriter.println("Artist found: " + artist);
+                        }//sends the artist by id to the clent
+
                     }
-                    else if (message.startsWith("Echo"))
-                    {
-                        message = message.substring(5); // strip off the 'Echo ' part
-                        socketWriter.println(message);  // send message to client
-                    }
+//                    else if (message.startsWith("Echo"))
+//                    {
+//                        message = message.substring(5); // strip off the 'Echo ' part
+//                        socketWriter.println(message);  // send message to client
+//                    }
                     else
                     {
                         socketWriter.println("I'm sorry I don't understand :(");
@@ -141,6 +155,8 @@ public class Server
             } catch (IOException ex)
             {
                 ex.printStackTrace();
+            } catch (DaoException e) {
+                throw new RuntimeException(e);
             }
             System.out.println("Server: (ClientHandler): Handler for Client " + clientNumber + " is terminating .....");
         }

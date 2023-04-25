@@ -37,7 +37,7 @@ public class Client {
         {
             Scanner in = new Scanner(System.in);
             try {
-                Socket socket = new Socket("10.102.198.18", 8080);  // connect to server socket
+                Socket socket = new Socket("192.168.178.69", 8080);  // connect to server socket
                 System.out.println("Client: Port# of this client : " + socket.getLocalPort());
                 System.out.println("Client: Port# of Server :" + socket.getPort() );
 
@@ -49,12 +49,18 @@ public class Client {
                 OutputStream os = socket.getOutputStream();
                 PrintWriter socketWriter = new PrintWriter(os, true);   // true => auto flush buffers
 
-                socketWriter.println(command);
-
+//                socketWriter.println(command);
+                if(command.startsWith("1"))   //we expect the server to return a time
+                {
+                    System.out.println("Please enter the Id of the Artist: ");
+                    int artistId=in.nextInt();
+                    socketWriter.println(command+" "+artistId);
+                }
                 Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
 
                 if(command.startsWith("1"))   //we expect the server to return a time
                 {
+
                     String artistByIdString = socketReader.nextLine();
                     System.out.println("Client message: Displaying Artist By ID: " + artistByIdString );
                 }
