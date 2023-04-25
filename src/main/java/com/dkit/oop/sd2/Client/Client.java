@@ -43,7 +43,7 @@ public class Client {
 
                 System.out.println("Client message: The Client is running and has connected to the server");
 
-                System.out.println("Please enter a command:  (\"Time\" to get time, or \"Echo message\" to get echo) \n>");
+                printMenuInstructions();
                 String command = in.nextLine();
 
                 OutputStream os = socket.getOutputStream();
@@ -53,16 +53,16 @@ public class Client {
 
                 Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
 
-                if(command.startsWith("Time"))   //we expect the server to return a time
+                if(command.startsWith("1"))   //we expect the server to return a time
                 {
-                    String timeString = socketReader.nextLine();
-                    System.out.println("Client message: Response from server Time: " + timeString);
+                    String artistByIdString = socketReader.nextLine();
+                    System.out.println("Client message: Displaying Artist By ID: " + artistByIdString );
                 }
-                else                            // the user has entered the Echo command or an invalid command
-                {
-                    String input = socketReader.nextLine();
-                    System.out.println("Client message: Response from server: \"" + input + "\"");
-                }
+//                else                            // the user has entered the Echo command or an invalid command
+//                {
+//                    String input = socketReader.nextLine();
+//                    System.out.println("Client message: Response from server: \"" + input + "\"");
+//                }
 
                 socketWriter.close();
                 socketReader.close();
@@ -72,6 +72,19 @@ public class Client {
                 System.out.println("Client message: IOException: "+e);
             }
         }
+    private static void printMenuInstructions() {
+        System.out.println("======================================  WELCOME ! ==============================");
+        System.out.println("|   ----------------------------------    MENU   ----------------------------  |");
+        System.out.println("|   |                          Please Select an option:                     |  |");
+        System.out.println("|   |                                0. Exit App                            |  |");
+        System.out.println("|   |                          1. Dispaly Artist By Id                      |  |");
+        System.out.println("|   |                          2. Display All Artists                       |  |");
+//        System.out.println("|   |                          3. Delete Artist By Id                       |  |");
+//        System.out.println("|   |                               4. Add Artist                           |  |");
+//        System.out.println("|   |                             5. Filter Artist                          |  |");
+        System.out.println("|   -------------------------------------------------------------------------  |");
+        System.out.println("================================================================================");
+    }
     }
 
 
