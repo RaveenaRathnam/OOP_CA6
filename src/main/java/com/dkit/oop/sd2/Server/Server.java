@@ -136,7 +136,7 @@ public class Server
                         String artist = IArtistDao.findArtistByIdJson(artistId);
                         if( artist != null ) // null returned if userid and password not valid
                         {
-                            socketWriter.println("Artist found: " + artist);
+                            socketWriter.println(artist);
                         }//sends the artist by id to the client
 
                     }

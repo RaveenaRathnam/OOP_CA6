@@ -34,6 +34,7 @@ public interface ArtistDaoInterface
     public List<Artist> filterArtists(IFilter filter) throws DaoException;
     public String findAllArtistsJson() throws DaoException;
     public String findArtistByIdJson(int artistId) throws DaoException;
+
 //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException;
 //    public Artist addUser(Artist artist) throws DaoException;
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException;

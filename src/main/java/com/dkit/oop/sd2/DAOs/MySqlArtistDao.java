@@ -17,10 +17,13 @@ package com.dkit.oop.sd2.DAOs;
 
 
 import com.dkit.oop.sd2.BusinessObjects.IFilter;
+import com.dkit.oop.sd2.BusinessObjects.JsonDeserializerArtist;
 import com.dkit.oop.sd2.Cache.ArtistCache;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -417,6 +420,8 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         Gson gsonParser = new Gson();
         return gsonParser.toJson(artist);
     }
+
+
 
 //    public Artist updatePassword(String usernamen, String passwordn) throws DaoException{
 //        Connection connection = null;
