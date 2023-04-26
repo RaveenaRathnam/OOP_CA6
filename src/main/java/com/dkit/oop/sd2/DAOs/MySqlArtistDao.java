@@ -290,11 +290,11 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 //        }
 //        return usersList;     // may be empty
 //    }
-    public Artist insertArtist(Artist artist) throws DaoException{
+    public void insertArtist(Artist artist) throws DaoException{
         Connection connection = null;
         PreparedStatement ps1 = null;
-        PreparedStatement ps2 = null;
-        ResultSet resultSet = null;
+
+
        // List<User> usersList = new ArrayList<>();
 //         artist = null;
 
@@ -304,31 +304,19 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
             connection = this.getConnection();
 
             String query1 = " INSERT INTO ARTIST (name, country, genre, active_since, biography, rating) VALUES(?,?,?,?,?,?)";
-            String query2="SELECT * FROM ARTIST WHERE NAME=?";
+
             ps1 = connection.prepareStatement(query1);
-            ps2 = connection.prepareStatement(query2);
+
             ps1.setString(1, artist.getName());
             ps1.setString(2, artist.getCountry());
             ps1.setString(3, artist.getGenre());
             ps1.setInt(4, artist.getActive_since());
             ps1.setString(5, artist.getBiography());
             ps1.setDouble(6, artist.getRating());
-            ps2.setString(1, artist.getName());
+
             //Using a PreparedStatement to execute SQL...
             ps1.executeUpdate();
-            resultSet = ps2.executeQuery();
-            if (resultSet.next())
-            {
-
-                String name = resultSet.getString("NAME");
-                String country = resultSet.getString("COUNTRY");
-                String genre = resultSet.getString("GENRE");
-                int active_since = resultSet.getInt("ACTIVE_SINCE");
-                String biography = resultSet.getString("BIOGRAPHY");
-                double rating =resultSet.getDouble("RATING");
-                artist= new Artist(name,country,genre,active_since,biography,rating);
-
-            }
+            System.out.println("Artist : " + artist.getName() + " has been added!");
         } catch (SQLException e)
         {
             throw new DaoException("findAllArtistresultSet() " + e.getMessage());
@@ -336,14 +324,11 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         {
             try
             {
-                if (resultSet != null)
-                {
-                    resultSet.close();
-                }
-                if (ps1 != null && ps2 !=null)
+
+                if (ps1 != null)
                 {
                     ps1.close();
-                    ps2.close();
+
                 }
                 if (connection != null)
                 {
@@ -351,10 +336,10 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
                 }
             } catch (SQLException e)
             {
-                throw new DaoException("findAllUsers() " + e.getMessage());
+                throw new DaoException("insertArtist() " + e.getMessage());
             }
         }
-        return artist;
+
     }
     /**
      * Filters the artists in the databases based on the provided filter.

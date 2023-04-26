@@ -236,12 +236,8 @@ public class App {
         System.out.println("Rating out of 5:");
         double rating =keyboard.nextDouble();
         Artist a=new Artist(name,country,genre,active_since,biography,rating);
-        Artist artist = IArtistDao.insertArtist(a);     // call a method in the DAO
-        if( artist!=null)
-            System.out.println("Artist added!"+artist.toString());
-        else {
-                System.out.println("Artist not added!");
-        }
+        IArtistDao.insertArtist(a);     // call a method in the DAO
+
     }
 
     private static void deleteArtistById() throws DaoException{

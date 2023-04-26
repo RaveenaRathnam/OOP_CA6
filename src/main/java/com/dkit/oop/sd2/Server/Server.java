@@ -32,10 +32,14 @@ package com.dkit.oop.sd2.Server;
  */
 
 
+import com.dkit.oop.sd2.BusinessObjects.JsonDeserializerArtist;
 import com.dkit.oop.sd2.DAOs.ArtistDaoInterface;
 import com.dkit.oop.sd2.DAOs.MySqlArtistDao;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,6 +54,14 @@ import java.util.Scanner;
 
 public class Server
 {
+    // Instantiate a GsonBuilder and register the TypeAdapter (to adapt types!)
+    // passing in the IssPositionAtTime class definition,
+    // the name of the deserialization object (containing the deserialize() method)
+    //
+    private static Gson gsonBuilder = new GsonBuilder()
+            .registerTypeAdapter(Artist.class, new JsonDeserializerArtist())
+            .serializeNulls()
+            .create();
     private static final Scanner keyboard = new Scanner(System.in);
     private static final ArtistDaoInterface IArtistDao = new MySqlArtistDao();//"IUserDao" -> "I" stands for for
     public static void main(String[] args)
@@ -123,6 +135,7 @@ public class Server
         public void run()
         {
             String message;
+            Gson gsonParser = new Gson();
             try
             {
                 while ((message = socketReader.readLine()) != null)
@@ -138,17 +151,27 @@ public class Server
                         {
                             socketWriter.println(artist);
                         }//sends the artist by id to the client
-
+                        else
+                        {
+                            String error="error : Artist with id : "+artistId+" not found!";
+                            socketWriter.println(error);
+                        }
                     }
                     else if (message.startsWith("2"))
                     {
                         String artists = IArtistDao.findAllArtistsJson();     // call a method in the DAO
+                        socketWriter.println(artists);  // send message to client
 
-                        if( artists.isEmpty() )
-                            System.out.println("There are no Artists");
-                        else {
-                            socketWriter.println(artists);  // send message to client
-                        }
+
+                    }
+                    else if (message.startsWith("3"))
+                    {
+                        Artist a =  gsonBuilder.fromJson(message.substring(2), new TypeToken<Artist>(){}.getType());
+                        IArtistDao.insertArtist(a);
+                        if( a != null )
+                        {
+                            socketWriter.println("Insert completed");
+                        }//sends the artist by id to the client
 
                     }
                     else
