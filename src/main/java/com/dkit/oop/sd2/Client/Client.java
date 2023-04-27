@@ -61,112 +61,109 @@ public class Client {
 
                 System.out.println("Client message: The Client is running and has connected to the server");
 
-                printMenuInstructions();
-                String command = in.nextLine();
+                boolean continueRunning = true;
+                while(continueRunning) {
+                    printMenuInstructions();
+                    String command = in.nextLine();
 
-                OutputStream os = socket.getOutputStream();
-                PrintWriter socketWriter = new PrintWriter(os, true);   // true => auto flush buffers
+                    OutputStream os = socket.getOutputStream();
+                    PrintWriter socketWriter = new PrintWriter(os, true);   // true => auto flush buffers
 
 //                socketWriter.println(command);
-                if(command.startsWith("1"))   //we expect the server to return a time
-                {
-                    System.out.println("Please enter the Id of the Artist: ");
-                    int artistId=in.nextInt();
-                    socketWriter.println(command+" "+artistId);
-               }
-                else if (command.startsWith("2")) {
-                    socketWriter.println(command);
-                }
-                else if (command.startsWith("3")) {
-                    System.out.println("Please enter the details of the artist:");
-                    System.out.println("Name:");
-                    String name =in.nextLine();
-                    System.out.println("Country:");
-                    String country =in.nextLine();
-                    System.out.println("Genre:");
-                    String genre =in.nextLine();
-                    System.out.println("Active Since:");
-                    int active_since =in.nextInt();
-                    in.nextLine();
-                    System.out.println("Biography:");
-                    String biography =in.nextLine();
-                    System.out.println("Rating out of 5:");
-                    double rating =in.nextDouble();
-                    Artist a=new Artist(name,country,genre,active_since,biography,rating);
-                    String artistJson= gsonParser.toJson(a);
-                    socketWriter.println(command+" "+artistJson);
-                }
-                if(command.startsWith("4"))   //we expect the server to return a time
-                {
-                    System.out.println("Please enter the Id of the Artist you wish  to delete : ");
-                    int artistId=in.nextInt();
-                    socketWriter.println(command+" "+artistId);
-                }
-
-
-
-                Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
-
-
-
-
-                if(command.startsWith("1"))   //we expect the server to return a time
-                {
-                    String artistByIdJson = socketReader.nextLine();
-
-                    if(artistByIdJson.startsWith("error")) {
-                        System.out.println(artistByIdJson);
+                    if (command.startsWith("1"))   //we expect the server to return a time
+                    {
+                        System.out.println("Please enter the Id of the Artist: ");
+                        int artistId = in.nextInt();
+                        socketWriter.println(command + " " + artistId);
+                        in.nextLine();
+                    } else if (command.startsWith("2")) {
+                        socketWriter.println(command);
+                    } else if (command.startsWith("3")) {
+                        System.out.println("Please enter the details of the artist:");
+                        System.out.println("Name:");
+                        String name = in.nextLine();
+                        System.out.println("Country:");
+                        String country = in.nextLine();
+                        System.out.println("Genre:");
+                        String genre = in.nextLine();
+                        System.out.println("Active Since:");
+                        int active_since = in.nextInt();
+                        in.nextLine();
+                        System.out.println("Biography:");
+                        String biography = in.nextLine();
+                        System.out.println("Rating out of 5:");
+                        double rating = in.nextDouble();
+                        Artist a = new Artist(name, country, genre, active_since, biography, rating);
+                        String artistJson = gsonParser.toJson(a);
+                        socketWriter.println(command + " " + artistJson);
+                        in.nextLine();
                     }
-                    else {
-                        // Now that we have set up the Adapter, we call the fromJson() method
-                        // to parse the JSON string and create and populate
-                        // the Java IssPositionAtTime object.
-                        //
-                        Artist artist = gsonBuilder.fromJson(artistByIdJson, new TypeToken<Artist>() {
-                        }.getType());
-                        System.out.println("Client message: Displaying Artist By ID: " + artist);
-                    }
-                }
-                else if(command.startsWith("2"))
-                {
-                    String artistsStringJson= socketReader.nextLine();
-                    if(artistsStringJson.startsWith("error")) {
-                        System.out.println(artistsStringJson);
-                    }
-                    else {
-                        System.out.println("Client message: Displaying All Artists: ");
-                        // Now that we have set up the Adapter, we call the fromJson() method
-                        // to parse the JSON string and create and populate
-                        // the Java IssPositionAtTime object.
-                        //
-                        Artist[] artists = gsonBuilder.fromJson(artistsStringJson, Artist[].class);
-                        List<Artist> artistList = new ArrayList<>(Arrays.asList(artists));
-                        for(Artist a:artistList){
-                            System.out.println(a);
+                    if (command.startsWith("4"))   //we expect the server to return a time
+                    {
+                        System.out.println("Please enter the Id of the Artist you wish  to delete : ");
+                        int artistId = in.nextInt();
+                        socketWriter.println(command + " " + artistId);
+                        in.nextLine();
                     }
 
+
+                    Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
+
+
+                    if (command.startsWith("1"))   //we expect the server to return a time
+                    {
+                        String artistByIdJson = socketReader.nextLine();
+
+                        if (artistByIdJson.startsWith("error")) {
+                            System.out.println(artistByIdJson);
+                        } else {
+                            // Now that we have set up the Adapter, we call the fromJson() method
+                            // to parse the JSON string and create and populate
+                            // the Java IssPositionAtTime object.
+                            //
+                            Artist artist = gsonBuilder.fromJson(artistByIdJson, new TypeToken<Artist>() {
+                            }.getType());
+                            System.out.println("Client message: Displaying Artist By ID: " + artist);
+                        }
+                    } else if (command.startsWith("2")) {
+                        String artistsStringJson = socketReader.nextLine();
+                        if (artistsStringJson.startsWith("error")) {
+                            System.out.println(artistsStringJson);
+                        } else {
+                            System.out.println("Client message: Displaying All Artists: ");
+                            // Now that we have set up the Adapter, we call the fromJson() method
+                            // to parse the JSON string and create and populate
+                            // the Java IssPositionAtTime object.
+                            //
+                            Artist[] artists = gsonBuilder.fromJson(artistsStringJson, Artist[].class);
+                            List<Artist> artistList = new ArrayList<>(Arrays.asList(artists));
+                            for (Artist a : artistList) {
+                                System.out.println(a);
+                            }
+
+                        }
+
+                    } else if (command.startsWith("3")) {
+                        String message = socketReader.nextLine();
+                        System.out.println("Client message: " + message);
+                    } else if (command.startsWith("4")) {
+                        String message = socketReader.nextLine();
+                        System.out.println("Client message: " + message);
+                    }
+                    else if (command.startsWith("0")) {
+                        System.out.println("Client message: Exiting..");
+                        socketWriter.close();
+                        socketReader.close();
+                        socket.close();
+                        continueRunning=false;
+                    }
+                    else                            // the user has entered the Echo command or an invalid command
+                    {
+                        String input = socketReader.nextLine();
+                        System.out.println("Client message: Response from server: \"" + input + "\"");
                     }
 
                 }
-                else if(command.startsWith("3"))
-                {
-                    String message=socketReader.nextLine();
-                    System.out.println("Client message: "+message);
-                }
-                else if(command.startsWith("4"))
-                {
-                    String message=socketReader.nextLine();
-                    System.out.println("Client message: "+message);
-                }
-                else                            // the user has entered the Echo command or an invalid command
-                {
-                    String input = socketReader.nextLine();
-                    System.out.println("Client message: Response from server: \"" + input + "\"");
-                }
-
-                socketWriter.close();
-                socketReader.close();
-                socket.close();
 
             } catch (IOException e) {
                 System.out.println("Client message: IOException: "+e);
