@@ -30,7 +30,7 @@ public interface ArtistDaoInterface
 
     public Artist findArtistById(int artistId) throws DaoException;
     public boolean deleteArtistById(int artistId) throws DaoException;
-    public void insertArtist(Artist artist) throws DaoException;
+    public boolean insertArtist(Artist artist) throws DaoException;
     public List<Artist> filterArtists(IFilter filter) throws DaoException;
     public String findAllArtistsJson() throws DaoException;
     public String findArtistByIdJson(int artistId) throws DaoException;

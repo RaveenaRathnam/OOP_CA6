@@ -236,8 +236,11 @@ public class App {
         System.out.println("Rating out of 5:");
         double rating =keyboard.nextDouble();
         Artist a=new Artist(name,country,genre,active_since,biography,rating);
-        IArtistDao.insertArtist(a);     // call a method in the DAO
-
+        boolean intserted=IArtistDao.insertArtist(a);     // call a method in the DAO
+        if( intserted== true) // null returned if userid and password not valid
+            System.out.println("Artist with id : "+a.getId()+" been successfully inserted");
+        else
+            System.out.println("Artist has not been inserted!");
     }
 
     private static void deleteArtistById() throws DaoException{

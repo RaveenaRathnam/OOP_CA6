@@ -290,10 +290,10 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 //        }
 //        return usersList;     // may be empty
 //    }
-    public void insertArtist(Artist artist) throws DaoException{
+    public boolean insertArtist(Artist artist) throws DaoException{
         Connection connection = null;
         PreparedStatement ps1 = null;
-
+        boolean result=false;
 
        // List<User> usersList = new ArrayList<>();
 //         artist = null;
@@ -315,8 +315,14 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
             ps1.setDouble(6, artist.getRating());
 
             //Using a PreparedStatement to execute SQL...
-            ps1.executeUpdate();
-            System.out.println("Artist : " + artist.getName() + " has been added!");
+
+            int value=ps1.executeUpdate();
+            if(value==1){
+                result=true;
+            }
+            else {
+                result=false;
+            }
         } catch (SQLException e)
         {
             throw new DaoException("findAllArtistresultSet() " + e.getMessage());
@@ -339,7 +345,7 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
                 throw new DaoException("insertArtist() " + e.getMessage());
             }
         }
-
+return result;
     }
     /**
      * Filters the artists in the databases based on the provided filter.

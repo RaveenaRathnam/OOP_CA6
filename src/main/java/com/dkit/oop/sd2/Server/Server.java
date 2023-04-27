@@ -160,18 +160,27 @@ public class Server
                     else if (message.startsWith("2"))
                     {
                         String artists = IArtistDao.findAllArtistsJson();     // call a method in the DAO
-                        socketWriter.println(artists);  // send message to client
-
-
+                        if( artists != null ) // null returned if userid and password not valid
+                        {
+                            socketWriter.println(artists);  // send message to client
+                        }//sends the artist by id to the client
+                        else
+                        {
+                            String error="error : No artists found!";
+                            socketWriter.println(error);
+                        }
                     }
                     else if (message.startsWith("3"))
                     {
-                        Artist a =  gsonBuilder.fromJson(message.substring(2), new TypeToken<Artist>(){}.getType());
-                        IArtistDao.insertArtist(a);
-                        if( a != null )
-                        {
+                        String artistJson=message.substring(2);
+                        Artist a =  gsonBuilder.fromJson(artistJson, new TypeToken<Artist>(){}.getType());
+                        boolean inserted=IArtistDao.insertArtist(a);
+                        if(inserted==true) {
                             socketWriter.println("Insert completed");
-                        }//sends the artist by id to the client
+                        }
+                        else {
+                            socketWriter.println("Insert failed!");
+                        }
 
                     }
                     else

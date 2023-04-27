@@ -52,6 +52,7 @@ public class Client {
 
         public void start()
         {
+            Gson gsonParser = new Gson();
             Scanner in = new Scanner(System.in);
             try {
                 Socket socket = new Socket("192.168.83.13", 8080);  // connect to server socket
@@ -92,7 +93,6 @@ public class Client {
                     System.out.println("Rating out of 5:");
                     double rating =in.nextDouble();
                     Artist a=new Artist(name,country,genre,active_since,biography,rating);
-                    Gson gsonParser = new Gson();
                     String artistJson= gsonParser.toJson(a);
                     socketWriter.println(command+" "+artistJson);
                 }
@@ -100,16 +100,16 @@ public class Client {
 
                 if(command.startsWith("1"))   //we expect the server to return a time
                 {
-
                     String artistByIdJson = socketReader.nextLine();
-                    // Now that we have set up the Adapter, we call the fromJson() method
-                    // to parse the JSON string and create and populate
-                    // the Java IssPositionAtTime object.
-                    //
+
                     if(artistByIdJson.startsWith("error")) {
                         System.out.println(artistByIdJson);
                     }
                     else {
+                        // Now that we have set up the Adapter, we call the fromJson() method
+                        // to parse the JSON string and create and populate
+                        // the Java IssPositionAtTime object.
+                        //
                         Artist artist = gsonBuilder.fromJson(artistByIdJson, new TypeToken<Artist>() {
                         }.getType());
                         System.out.println("Client message: Displaying Artist By ID: " + artist);
@@ -117,12 +117,22 @@ public class Client {
                 }
                 else if(command.startsWith("2"))
                 {
-                    System.out.println("Client message: Displaying All Artists: ");
                     String artistsStringJson= socketReader.nextLine();
-                    Artist[] artists = gsonBuilder.fromJson(artistsStringJson, Artist[].class);
-                    List<Artist> artistList = new ArrayList<>(Arrays.asList(artists));
-                    for(Artist a:artistList){
-                        System.out.println(a);
+                    if(artistsStringJson.startsWith("error")) {
+                        System.out.println(artistsStringJson);
+                    }
+                    else {
+                        System.out.println("Client message: Displaying All Artists: ");
+                        // Now that we have set up the Adapter, we call the fromJson() method
+                        // to parse the JSON string and create and populate
+                        // the Java IssPositionAtTime object.
+                        //
+                        Artist[] artists = gsonBuilder.fromJson(artistsStringJson, Artist[].class);
+                        List<Artist> artistList = new ArrayList<>(Arrays.asList(artists));
+                        for(Artist a:artistList){
+                            System.out.println(a);
+                    }
+
                     }
 
                 }
