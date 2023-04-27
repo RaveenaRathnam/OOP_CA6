@@ -55,7 +55,7 @@ public class Client {
             Gson gsonParser = new Gson();
             Scanner in = new Scanner(System.in);
             try {
-                Socket socket = new Socket("192.168.83.13", 8080);  // connect to server socket
+                Socket socket = new Socket("192.168.35.13", 8080);  // connect to server socket
                 System.out.println("Client: Port# of this client : " + socket.getLocalPort());
                 System.out.println("Client: Port# of Server :" + socket.getPort() );
 
@@ -96,7 +96,19 @@ public class Client {
                     String artistJson= gsonParser.toJson(a);
                     socketWriter.println(command+" "+artistJson);
                 }
+                if(command.startsWith("4"))   //we expect the server to return a time
+                {
+                    System.out.println("Please enter the Id of the Artist you wish  to delete : ");
+                    int artistId=in.nextInt();
+                    socketWriter.println(command+" "+artistId);
+                }
+
+
+
                 Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
+
+
+
 
                 if(command.startsWith("1"))   //we expect the server to return a time
                 {
@@ -137,6 +149,11 @@ public class Client {
 
                 }
                 else if(command.startsWith("3"))
+                {
+                    String message=socketReader.nextLine();
+                    System.out.println("Client message: "+message);
+                }
+                else if(command.startsWith("4"))
                 {
                     String message=socketReader.nextLine();
                     System.out.println("Client message: "+message);
