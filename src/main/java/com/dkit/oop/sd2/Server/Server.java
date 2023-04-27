@@ -144,8 +144,7 @@ public class Server
 
                     if (message.startsWith("1"))
                     {
-                        String[] charactersArrayArtist = message.split(" ");
-                        int artistId=Integer.parseInt(charactersArrayArtist[1]);
+                        int artistId=Integer.parseInt(message.substring(2));
                         String artist = IArtistDao.findArtistByIdJson(artistId);
                         if( artist != null ) // null returned if userid and password not valid
                         {
@@ -180,6 +179,18 @@ public class Server
                         }
                         else {
                             socketWriter.println("Insert failed!");
+                        }
+
+                    }
+                    else if (message.startsWith("4"))
+                    {
+                        int artistId=Integer.parseInt(message.substring(2));
+                        boolean deleted=IArtistDao.deleteArtistById(artistId);
+                        if(deleted==true) {
+                            socketWriter.println("Deleted artist with id : "+artistId);
+                        }
+                        else {
+                            socketWriter.println("Deleting failed!");
                         }
 
                     }
