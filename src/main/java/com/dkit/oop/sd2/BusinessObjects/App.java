@@ -22,10 +22,7 @@ import com.dkit.oop.sd2.DAOs.ArtistDaoInterface;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 //
 public class App {
@@ -262,10 +259,15 @@ public class App {
             int artistId=keyboard.nextInt();
             Artist artist = IArtistDao.findArtistById(artistId);
             if( artist != null ) // null returned if userid and password not valid
+            {
                 System.out.println("Artist found: " + artist);
+            }
+            else{
+                System.out.println("Artist with id : "+artistId+" Not Found");
+            }
     }
 
-    private static void displayAllArtists() throws DaoException{
+    static void displayAllArtists() throws DaoException{
         System.out.println("\nCall findAllArtists()");
             List<Artist> artists = IArtistDao.findAllArtists();     // call a method in the DAO
 
@@ -304,11 +306,15 @@ public class App {
         System.out.println("================================================================================");
     }
     private static void printFilteredList(List<Artist> artistList) {
-        System.out.println("\nDisplaying filtered artists: \n");
-        for(Artist a : artistList)
-        {
-            System.out.println(a);
-            System.out.println();
+        if(artistList.isEmpty()){
+            System.out.println("Wrong input please check again.");
+        }
+        else {
+            System.out.println("\nDisplaying filtered artists: \n");
+            for (Artist a : artistList) {
+                System.out.println(a);
+                System.out.println();
+            }
         }
     }
 }

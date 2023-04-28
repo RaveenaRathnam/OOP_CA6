@@ -129,9 +129,6 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 
                      }
                  }
-                 else{
-                     System.out.println("Artist with Id: "+artistId+" Not found!");
-                 }
             } catch (SQLException e) {
                 throw new DaoException("findArtistById() " + e.getMessage());
             } finally {
