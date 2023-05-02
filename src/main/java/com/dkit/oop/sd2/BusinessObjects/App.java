@@ -28,6 +28,8 @@ import java.util.*;
 public class App {
     private static final Scanner keyboard = new Scanner(System.in);
     private static final ArtistDaoInterface IArtistDao = new MySqlArtistDao();//"IUserDao" -> "I" stands for for
+
+
     public static void main(String[] args) {
 
 
