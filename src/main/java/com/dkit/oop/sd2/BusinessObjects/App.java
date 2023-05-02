@@ -266,6 +266,7 @@ public class App {
             }
             else{
                 System.out.println("Artist with id : "+artistId+" Not Found");
+
             }
     }
 

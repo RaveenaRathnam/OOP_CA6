@@ -3,6 +3,7 @@ package com.dkit.oop.sd2.BusinessObjects;
 import com.dkit.oop.sd2.DAOs.ArtistDaoInterface;
 import com.dkit.oop.sd2.DTOs.Artist;
 import com.dkit.oop.sd2.Exceptions.DaoException;
+import com.google.gson.Gson;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -140,5 +141,34 @@ public class AppTest {
         assertEquals(artistsExpected,artistsActual);
 
     }
+    @Test
+    public void testFindAllArtistsJson() throws DaoException {
+        String expected = "Artist{id=1, name='Artist1', country='Country1', genre='Genre1', active_since=2000, biography='Biography1', rating=4.5}\n" +
+                          "Artist{id=2, name='Artist2', country='Country2', genre='Genre2', active_since=1995, biography='Biography2', rating=4.0}\n" +
+                          "Artist{id=3, name='Artist3', country='Country3', genre='Genre3', active_since=2010, biography='Biography3', rating=3.5}\n" +
+                           "";
+        // Mock the DAO's findArtistById() method to return the example Artist object
+        when(daoMock.findAllArtistsJson()).thenReturn(expected);
+
+        // Call the DAO's findArtistByIdJson() method with the ID of the example Artist object
+        String json = daoMock.findAllArtistsJson();
+
+        // Assert that the deserialized Artist object matches the example Artist object
+        assertEquals(expected,json);
+    }
+    @Test
+    public void testFindArtistByIdJson() throws DaoException {
+        // Create an example Artist object
+         String expected = "Artist{id=1, name='Artist1', country='Country1', genre='Genre1', active_since=2000, biography='Biography1', rating=4.5}";
+        // Mock the DAO's findArtistById() method to return the example Artist object
+        when(daoMock.findArtistByIdJson(1)).thenReturn(String.valueOf(expected));
+
+        // Call the DAO's findArtistByIdJson() method with the ID of the example Artist object
+        String json = daoMock.findArtistByIdJson(1);
+
+        // Assert that the deserialized Artist object matches the example Artist object
+        assertEquals(expected,json);
+    }
+
 
 }

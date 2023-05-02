@@ -37,7 +37,7 @@ import java.util.Vector;
 
 public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
 {
-
+    ArtistCache cache = new ArtistCache();
     @Override
     public List<Artist> findAllArtists() throws DaoException
     {
@@ -69,6 +69,10 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
                 artistsList.add(a);
 
             }
+            if(!artistsList.isEmpty())
+                for(Artist a:artistsList){
+                    cache.add(a.getId());
+                }
         } catch (SQLException e)
         {
             throw new DaoException("findAllArtistsresultSet() " + e.getMessage());
@@ -93,7 +97,9 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
                 throw new DaoException("findAllArtists() " + e.getMessage());
             }
         }
+
         return artistsList;     // may be empty
+
     }
 
     @Override
@@ -103,15 +109,10 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Artist artist = null;
-        HashSet<Integer> artistCache = new HashSet<>();
-        List<Artist> intialArtistList=new ArrayList<>();
+        findAllArtists();
             try {
                 connection = this.getConnection();
-                intialArtistList=findAllArtists();
-                 for(Artist a:intialArtistList){
-                     artistCache.add(a.getId());
-                 }
-                 if(artistCache.contains(artistId)) {
+                 if(cache.contains(artistId)) {
                      String query = "SELECT * FROM ARTIST WHERE ID= ?";
                      preparedStatement = connection.prepareStatement(query);
                      preparedStatement.setInt(1, artistId);
@@ -157,22 +158,24 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         boolean result=false;
+        findAllArtists();
         try
         {
             connection = this.getConnection();
+            if(cache.contains(artistId)) {
+                String query = "DELETE FROM ARTIST WHERE ID= ?";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, artistId);
 
-            String query = "DELETE FROM ARTIST WHERE ID= ?";
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,artistId);
+                int value = preparedStatement.executeUpdate();
 
-            int value=preparedStatement.executeUpdate();
-            if(value==1){
-                result=true;
+                if (value == 1) {
+                    result = true;
+                    cache.remove(artistId);
+                } else {
+                    result = false;
+                }
             }
-            else {
-                result=false;
-            }
-
         } catch (SQLException e)
         {
             throw new DaoException("deleteArtistById() " + e.getMessage());
@@ -199,99 +202,12 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         }
         return result;
     }
-//    /**
-//     * Filters the recipes in the databases based on the provided filter.
-//     *
-//     * @param filter An IFilter object, which is checked against all the recipes to see if they match the filter.
-//     * @see IFilter
-//     * @return A list of the filtered recipes
-//     * @throws DaoException Extends SQLException
-//     */
-//    @Override
-//    public List<Recipe> filterRecipes(IFilter filter) throws DaoException
-//    {
-//        List<Recipe> filteredList = new ArrayList<>();
-//
-//        try
-//        {
-//            List<Recipe> allRecipes = findAllRecipes();
-//            for(Recipe recipe : allRecipes)
-//            {
-//                if(filter.matches(recipe))
-//                {
-//                    filteredList.add(recipe);
-//                }
-//            }
-//        }
-//        catch (DaoException daoe)
-//        {
-//            System.out.println("filterRecipes() " + daoe.getMessage());
-//        }
-//
-//        return filteredList;
-//    }
 
-    //    public List<Artist> findAllUsersLastNameContains(String subString) throws DaoException{
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//        ResultSet resultSet = null;
-//        List<Artist> usersList = new ArrayList<>();
-//
-//        try
-//        {
-//            //Get connection object using the methods in the super class (MySqlDao.java)...
-//            connection = this.getConnection();
-//
-//            String query = "SELECT * FROM USER WHERE LAST_NAME LIKE '%' ? '%'";
-//
-//            preparedStatement = connection.prepareStatement(query);
-//            preparedStatement.setString(1,subString);
-//
-//
-//            resultSet = preparedStatement.executeQuery();
-//            //Using a PreparedStatement to execute SQL...
-//
-//            while (resultSet.next())
-//            {
-//                int userId = resultSet.getInt("USER_ID");
-//                String username = resultSet.getString("USERNAME");
-//                String password = resultSet.getString("PASSWORD");
-//                String lastname = resultSet.getString("LAST_NAME");
-//                String firstname = resultSet.getString("FIRST_NAME");
-//                Artist u = new Artist(userId, firstname, lastname, username, password);
-//                usersList.add(u);
-//            }
-//        } catch (SQLException e)
-//        {
-//            throw new DaoException("findAllUsers() " + e.getMessage());
-//        } finally
-//        {
-//            try
-//            {
-//                if (resultSet != null)
-//                {
-//                    resultSet.close();
-//                }
-//                if (preparedStatement != null)
-//                {
-//                    preparedStatement.close();
-//                }
-//                if (connection != null)
-//                {
-//                    freeConnection(connection);
-//                }
-//            } catch (SQLException e)
-//            {
-//                throw new DaoException("findAllUsers() " + e.getMessage());
-//            }
-//        }
-//        return usersList;     // may be empty
-//    }
     public boolean insertArtist(Artist artist) throws DaoException{
         Connection connection = null;
         PreparedStatement ps1 = null;
         boolean result=false;
-
+        findAllArtists();
        // List<User> usersList = new ArrayList<>();
 //         artist = null;
 
@@ -299,26 +215,27 @@ public class MySqlArtistDao extends MySqlDao implements ArtistDaoInterface
         {
             //Get connection object using the methods in the super class (MySqlDao.java)...
             connection = this.getConnection();
+            if(!cache.contains(artist.getId())) {
+                String query1 = " INSERT INTO ARTIST (name, country, genre, active_since, biography, rating) VALUES(?,?,?,?,?,?)";
 
-            String query1 = " INSERT INTO ARTIST (name, country, genre, active_since, biography, rating) VALUES(?,?,?,?,?,?)";
+                ps1 = connection.prepareStatement(query1);
 
-            ps1 = connection.prepareStatement(query1);
+                ps1.setString(1, artist.getName());
+                ps1.setString(2, artist.getCountry());
+                ps1.setString(3, artist.getGenre());
+                ps1.setInt(4, artist.getActive_since());
+                ps1.setString(5, artist.getBiography());
+                ps1.setDouble(6, artist.getRating());
 
-            ps1.setString(1, artist.getName());
-            ps1.setString(2, artist.getCountry());
-            ps1.setString(3, artist.getGenre());
-            ps1.setInt(4, artist.getActive_since());
-            ps1.setString(5, artist.getBiography());
-            ps1.setDouble(6, artist.getRating());
+                //Using a PreparedStatement to execute SQL...
 
-            //Using a PreparedStatement to execute SQL...
-
-            int value=ps1.executeUpdate();
-            if(value==1){
-                result=true;
-            }
-            else {
-                result=false;
+                int value = ps1.executeUpdate();
+                if (value == 1) {
+                    result = true;
+                    cache.add(artist.getId());
+                } else {
+                    result = false;
+                }
             }
         } catch (SQLException e)
         {
