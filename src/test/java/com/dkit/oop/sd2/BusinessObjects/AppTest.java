@@ -17,22 +17,11 @@ import static org.mockito.Mockito.*;
 public class AppTest {
 
     private static ArtistDaoInterface daoMock;
-    private List<Artist> artists;
+
     @Before
     public void setUp() throws Exception {
         daoMock=mock(ArtistDaoInterface.class);
-        artists = new ArrayList<>();
-        artists.add(new Artist(1, "Artist1", "Country1", "Genre1", 2000, "Biography1", 4.5));
-        artists.add(new Artist(2, "Artist2", "Country2", "Genre2", 1995, "Biography2", 4.0));
-        artists.add(new Artist(3, "Artist3", "Country3", "Genre3", 2010, "Biography3", 3.5));
 
-        try {
-            for(int i=0;i<artists.size();i++) {
-                daoMock.insertArtist(artists.get(i));
-            }
-        } catch (DaoException e) {
-            System.out.println("Error adding artists: " + e.getMessage());
-        }
     }
 
     @After
@@ -101,6 +90,55 @@ public class AppTest {
         assertTrue(inserted);
     }
 
+    @Test
+    public void testFilterArtistsByName() throws DaoException {
+        IFilter filter=new FilterArtistsByName("Artist1");
+        List<Artist> artistsExpected = new ArrayList<>();
+        artistsExpected.add(new Artist(1, "Artist1", "Country1", "Genre1", 2000, "Biography1", 4.5));
 
+        when(daoMock.filterArtists(filter)).thenReturn(artistsExpected);
+        List<Artist> artistsActual=daoMock.filterArtists(filter);
+
+         assertEquals(artistsExpected,artistsActual);
+
+    }
+    @Test
+    public void testFilterArtistsByGenre() throws DaoException {
+        IFilter filter=new FilterArtistsByGenre("Genre1");
+        List<Artist> artistsExpected = new ArrayList<>();
+        artistsExpected.add(new Artist(1, "Artist1", "Country1", "Genre1", 2000, "Biography1", 4.5));
+
+        when(daoMock.filterArtists(filter)).thenReturn(artistsExpected);
+        List<Artist> artistsActual=daoMock.filterArtists(filter);
+
+        assertEquals(artistsExpected,artistsActual);
+
+    }
+    @Test
+    public void testFilterArtistsByRating() throws DaoException {
+        IFilter filter=new FilterArtistsByRating(3.5,4.5);
+        List<Artist> artistsExpected = new ArrayList<>();
+        artistsExpected.add(new Artist(1, "Artist1", "Country1", "Genre1", 2000, "Biography1", 4.5));
+        artistsExpected.add(new Artist(2, "Artist2", "Country2", "Genre2", 1995, "Biography2", 4.0));
+        artistsExpected.add(new Artist(3, "Artist3", "Country3", "Genre3", 2010, "Biography3", 3.5));
+        when(daoMock.filterArtists(filter)).thenReturn(artistsExpected);
+        List<Artist> artistsActual=daoMock.filterArtists(filter);
+
+        assertEquals(artistsExpected,artistsActual);
+
+    }
+    @Test
+    public void testFilterArtistsByActiveSince() throws DaoException {
+        IFilter filter=new FilterArtistsByActiveSince(1995,2010);
+        List<Artist> artistsExpected = new ArrayList<>();
+        artistsExpected.add(new Artist(1, "Artist1", "Country1", "Genre1", 2000, "Biography1", 4.5));
+        artistsExpected.add(new Artist(2, "Artist2", "Country2", "Genre2", 1995, "Biography2", 4.0));
+        artistsExpected.add(new Artist(3, "Artist3", "Country3", "Genre3", 2010, "Biography3", 3.5));
+        when(daoMock.filterArtists(filter)).thenReturn(artistsExpected);
+        List<Artist> artistsActual=daoMock.filterArtists(filter);
+
+        assertEquals(artistsExpected,artistsActual);
+
+    }
 
 }
